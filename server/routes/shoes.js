@@ -32,8 +32,7 @@ router.post('/', function (req, res) {
             console.log('error connecting to database', errorConnectingToDatabase)
             res.sendStatus(500);
         } else {
-            client.query(`INSERT INTO shoes (name, cost) VALUES($1, $2);`, [req.body.name, req.body.cost], function(errorMakingQuery, result){
-                console.log('Error making query ', errorMakingQuery)
+            client.query('INSERT INTO shoes (name, cost) VALUES($1, $2);', [req.body.name, req.body.cost], function(errorMakingQuery, result){
                 done();
                 if(errorMakingQuery){
                     console.log('query failed ', errorMakingQuery)
