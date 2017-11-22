@@ -32,17 +32,38 @@ router.post('/', function (req, res) {
             console.log('error connecting to database', errorConnectingToDatabase)
             res.sendStatus(500);
         } else {
-            client.query('INSERT INTO shoes (name, cost) VALUES($1, $2);', [req.body.name, req.body.cost], function(errorMakingQuery, result){
+            client.query('INSERT INTO shoes (name, cost) VALUES($1, $2);', [req.body.name, req.body.cost], function (errorMakingQuery, result) {
                 done();
-                if(errorMakingQuery){
+                if (errorMakingQuery) {
                     console.log('query failed ', errorMakingQuery)
                     res.sendStatus(500);
-                }else{
+                } else {
                     res.sendStatus(201);
                 }
             })
         }
     })
 });
+
+router.delete('/:id', function (req, res) {
+    var shoeIdToRemove = req.params.id;
+    pool.connect(function (errorConnectingToDatabase, client, done) {
+        if (errorConnectingToDatabase) {
+            console.log('error connecting to database', errorConnectingToDatabase)
+            res.sendStatus(500);
+        } else {
+            client.query('DELETE FROM shoes WHERE id = $1', [shoeIdToRemove], function (errorMakingQuery, result) {
+                done();
+                if (errorMakingQuery) {
+                    console.log('query failed ', errorMakingQuery)
+                    res.sendStatus(500);
+                } else {
+                    res.sendStatus(204);
+                }
+            })
+        }
+    })
+});
+
 
 module.exports = router;
